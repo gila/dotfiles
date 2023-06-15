@@ -36,6 +36,8 @@
     ];
 
     extraPackages = with pkgs; [
+      rnix-lsp
+      gopls
       black
       lua-language-server
       luaformatter
@@ -49,6 +51,9 @@
       	:luafile ~/.config/nvim/lua/init.lua
     '';
   };
+
+  programs.go.enable = true;
+
 
   programs.dircolors = {
     enable = true;
@@ -105,7 +110,7 @@
     ];
 
     oh-my-zsh = {
-      theme = "duellj";  
+      theme = "duellj";
       enable = true;
       plugins = [
         "colored-man-pages"
@@ -144,8 +149,7 @@
     '';
   };
 
-  home.file = {
-  };
+  home.file = { };
 
   home.sessionVariables = {
     EDITOR = "nvim";

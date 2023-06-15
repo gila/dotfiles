@@ -26,9 +26,9 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.colorcolumn = "80"
 
+require("plugins")
 require("keymap")
 require("lsp-config")
-require("plugins")
 require("compe")
 
 vim.cmd([[colorscheme onedark]])

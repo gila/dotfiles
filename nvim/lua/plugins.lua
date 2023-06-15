@@ -3,9 +3,8 @@ require("onedark").setup {
   style = "dark",
 }
 
-require("nvim-treesitter").setup {
-  ensure_installed = "all",
-  highlight = {
+require'nvim-treesitter.configs'.setup {
+    highlight = {
     enable = true,
     use_langauge_tree = true,
   },
@@ -20,17 +19,17 @@ require("nvim-treesitter").setup {
 
 local null_ls = require "null-ls"
 
-null_ls.setup {
+null_ls.setup ({
   sources = {
-
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.formatting.nixpkgs_fmt,
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.yamlfix,
+    null_ls.builtins.formatting.gofumpt
   },
-}
+})
 
-require("bufferline").setup {
+require("bufferline").setup ({
   options = {
     offsets = { { filetype = "NvimTree", text = "", padding = 1 } },
     buffer_close_icon = "X",
@@ -48,7 +47,7 @@ require("bufferline").setup {
     separator_style = "thin",
     diagnostic = "nvim_lsp",
   },
-}
+})
 
 local map = vim.api.nvim_set_keymap
 -- move between tabs

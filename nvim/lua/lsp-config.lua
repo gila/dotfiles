@@ -1,12 +1,7 @@
 local lsp = require "lsp-zero"
-
+local l = require("lspconfig")
 lsp.preset "recommended"
 
-lsp.ensure_installed {
-  "pyright",
-  "rust_analyzer",
-  "pyright",
-}
 
 lsp.nvim_workspace()
 
@@ -68,6 +63,10 @@ lsp.on_attach(function(bufnr)
     vim.lsp.buf.signature_help()
   end, opts)
 end)
+
+
+l.gopls.setup({})
+l.rnix.setup({})
 
 lsp.setup()
 
