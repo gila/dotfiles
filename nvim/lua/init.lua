@@ -28,7 +28,7 @@ vim.opt.colorcolumn = "80"
 
 require("plugins")
 require("keymap")
-require("lsp-config")
 require("compe")
+require("lsp-config")
 
 vim.cmd([[colorscheme onedark]])
