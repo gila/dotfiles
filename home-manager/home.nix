@@ -5,8 +5,10 @@
   home.homeDirectory = "/home/gila";
   home.stateVersion = "23.05";
   home.packages = with pkgs; [
-    ripgrep
     fd
+    k9s
+    mosh
+    ripgrep
   ];
 
   programs.neovim = {
