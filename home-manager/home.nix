@@ -1,10 +1,8 @@
 { config, pkgs, ... }:
 
 {
-  home.username = "gila";
-  home.homeDirectory = "/home/gila";
-  home.stateVersion = "23.05";
   home.packages = with pkgs; [
+    rustup
     fd
     k9s
     mosh

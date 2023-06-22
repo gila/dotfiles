@@ -11,13 +11,29 @@
   };
 
   outputs = { self, nixpkgs, home-manager, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        homeConfigurations."gila" = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ ./home.nix ];
-        };
-      });
+    let
+      username = "gila";
+      #system = "aarch64-darwin";
+      #pkgs = nixpkgs.legacyPackages.${system};
+    in
+    {
+      homeConfigurations."m1" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        modules = [
+        {
+
+          home.username = "${username}";
+          home.homeDirectory = "/home/${username}";
+          home.stateVersion = "23.05";
+          }
+          ./home.nix
+
+        ];
+      };
+
+      homeConfigurations."gila" = home-manager.lib.homeManagerConfiguration {
+        modules = [ ./home.nix ];
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      };
+    };
 }
