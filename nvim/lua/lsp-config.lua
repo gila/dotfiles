@@ -74,3 +74,4 @@ vim.diagnostic.config({
 })
 
 vim.api.nvim_set_keymap("n", "<leader>fm", "<cmd>lua vim.lsp.buf.format()<CR>", {})
+vim.api.nvim_set_keymap("n", "<leader>ft", "<cmd>lua require('whitespace-nvim').trim<CR>", {})
