@@ -33,6 +33,8 @@
       plenary-nvim
       telescope-nvim
       vim-vsnip
+      colorizer
+      whitespace-nvim
     ];
 
     extraPackages = with pkgs; [

@@ -66,6 +66,27 @@ end)
 l.gopls.setup({})
 l.rnix.setup({})
 l.ansiblels.setup({})
+l.rust_analyzer.setup({
+    on_attach=lsp.on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+        }
+    }
+})
 
 lsp.setup()
 
