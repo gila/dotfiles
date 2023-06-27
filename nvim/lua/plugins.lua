@@ -3,7 +3,6 @@ require("onedark").setup({
     style = "dark",
 })
 
-
 require("nvim-treesitter.configs").setup({
     highlight = {
         enable = true,

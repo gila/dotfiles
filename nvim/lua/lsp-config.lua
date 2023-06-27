@@ -1,73 +1,50 @@
-local lsp = require("lsp-zero")
-local l = require("lspconfig")
-lsp.preset("recommended")
+local lsp = require("lspconfig")
 
-lsp.nvim_workspace()
+local on_attach = function(client, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-local cmp = require("cmp")
-local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-    ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-    ["<TAB>"] = cmp.mapping.select_prev_item(cmp_select),
-    ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-})
+    local opts = { noremap = true, silent = true }
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<Cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
 
-lsp.setup_nvim_cmp({
-    mapping = cmp_mappings,
-})
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 
-lsp.set_preferences({
-    suggest_lsp_servers = false,
-    sign_icons = {
-        error = "E",
-        warn = "W",
-        hint = "H",
-        info = "I",
-    },
-})
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "[d", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
 
-lsp.on_attach(function(bufnr)
-    local opts = { buffer = bufnr, remap = false }
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(
+        bufnr,
+        "n",
+        "<leader>wl",
+        "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
+        opts
+    )
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 
-    vim.keymap.set("n", "gd", function()
-        vim.lsp.buf.definition()
-    end, opts)
-    vim.keymap.set("n", "K", function()
-        vim.lsp.buf.hover()
-    end, opts)
-    vim.keymap.set("n", "<leader>vws", function()
-        vim.lsp.buf.workspace_symbol()
-    end, opts)
-    vim.keymap.set("n", "<leader>vd", function()
-        vim.diagnostic.open_float()
-    end, opts)
-    vim.keymap.set("n", "[d", function()
-        vim.diagnostic.goto_next()
-    end, opts)
-    vim.keymap.set("n", "]d", function()
-        vim.diagnostic.goto_prev()
-    end, opts)
-    vim.keymap.set("n", "<leader>ca", function()
-        vim.lsp.buf.code_action()
-    end, opts)
-    vim.keymap.set("n", "<leader>cr", function()
-        vim.lsp.buf.references()
-    end, opts)
-    vim.keymap.set("n", "<leader>lrn", function()
-        vim.lsp.buf.rename()
-    end, opts)
-    vim.keymap.set("i", "<C-h>", function()
-        vim.lsp.buf.signature_help()
-    end, opts)
-end)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>q", "<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>", opts)
+end
 
-l.gopls.setup({})
-l.rnix.setup({})
-l.ansiblels.setup({})
-l.rust_analyzer.setup({
-    on_attach=lsp.on_attach,
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local servers = { "gopls", "rnix", "ansiblels" }
+
+for _, l in ipairs(servers) do
+    lsp[l].setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+    })
+end
+
+lsp.rust_analyzer.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
     settings = {
         ["rust-analyzer"] = {
             imports = {
@@ -82,17 +59,21 @@ l.rust_analyzer.setup({
                 },
             },
             procMacro = {
-                enable = true
+                enable = true,
             },
-        }
-    }
+        },
+    },
 })
-
-lsp.setup()
 
 vim.diagnostic.config({
-    virtual_text = true,
+    virtual_text = false,
 })
+
+vim.lsp.diagnostic.float = {
+    focusable = true,
+    style = "minimal",
+    border = "rounded",
+}
 
 vim.api.nvim_set_keymap("n", "<leader>fm", "<cmd>lua vim.lsp.buf.format()<CR>", {})
 vim.api.nvim_set_keymap("n", "<leader>ft", "<cmd>lua require('whitespace-nvim').trim<CR>", {})

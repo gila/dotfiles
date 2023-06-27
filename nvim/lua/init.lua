@@ -26,8 +26,8 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.colorcolumn = "80"
 
-require("plugins")
 require("keymap")
+require("plugins")
 require("compe")
 require("lsp-config")
 
