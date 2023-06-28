@@ -35,6 +35,7 @@
       vim-vsnip
       colorizer
       whitespace-nvim
+      rust-tools-nvim
     ];
 
     extraPackages = with pkgs; [
