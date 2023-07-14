@@ -10,11 +10,17 @@
       url = "github:nix-community/home-manager/release-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    darwin = {
+     url = "github:lnl7/nix-darwin/master";
+    inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
     home-manager,
     nixpkgs,
+    darwin,
   }: let
     allSystems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
 
@@ -45,6 +51,12 @@
         ];
       };
     });
+
+    darwinConfigurations."m2" = darwin.lib.darwinSystem {
+        specialArgs = { inherit darwin overlay; };
+        system = "aarch64-darwin";
+        modules = [./nix/darwin-configuration ];
+    };
 
     formatter = forAllSystems ({pkgs}: pkgs.alejandra);
     packages = forAllSystems ({pkgs}: {
