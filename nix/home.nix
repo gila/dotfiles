@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
     rustup
     fd
@@ -56,8 +58,12 @@
     '';
   };
 
-  programs.go.enable = true;
+  xdg.configFile.nvim = {
+    source = ./lua;
+    recursive = true;
+  };
 
+  programs.go.enable = true;
 
   programs.dircolors = {
     enable = true;
@@ -73,8 +79,7 @@
     enable = true;
     enableZshIntegration = true;
     enableBashIntegration = true;
-    defaultOptions =
-      [ "--height 40%" "--layout=reverse" "--border" "--inline-info" ];
+    defaultOptions = ["--height 40%" "--layout=reverse" "--border" "--inline-info"];
   };
 
   programs.starship = {
@@ -96,7 +101,6 @@
 
     shellAliases = {
       ls = "${pkgs.exa}/bin/exa --group-directories-first";
-
     };
 
     plugins = [
@@ -110,7 +114,6 @@
         file = "nix-shell.plugin.zsh";
         src = "${pkgs.zsh-nix-shell}/share/zsh-nix-shell";
       }
-
     ];
 
     oh-my-zsh = {
@@ -145,15 +148,15 @@
       tmuxPlugins.prefix-highlight
       tmuxPlugins.yank
     ];
-    extraConfig = '' 
-    bind -r k select-pane -U 
-    bind -r j select-pane -D 
-    bind -r h select-pane -L 
-    bind -r l select-pane -R
+    extraConfig = ''
+      bind -r k select-pane -U
+      bind -r j select-pane -D
+      bind -r h select-pane -L
+      bind -r l select-pane -R
     '';
   };
 
-  home.file = { };
+  home.file = {};
 
   home.sessionVariables = {
     EDITOR = "nvim";

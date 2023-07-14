@@ -42,7 +42,7 @@ for _, l in ipairs(servers) do
 	})
 end
 local opts = {
-	tools = { 
+	tools = {
 		autoSetHints = true,
 		executor = require("rust-tools/executors").termopen,
 		inlay_hints = {
