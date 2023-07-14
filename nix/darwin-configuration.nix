@@ -1,47 +1,40 @@
-{ config, pkgs, ... }:
-
 {
-  imports = [ <home-manager/nix-darwin> ];
-  nixpkgs.overlays = [
-    #    (import ./overlays/yabai.nix)
-  ];
-
+  config,
+  pkgs,
+  ...
+}: {
   home-manager.useUserPackages = true;
   homebrew = {
     enable = true;
     autoUpdate = false;
-    casks = [ ];
-    brews = [ "zellij" "koekeishiya/formulae/skhd" ];
+    casks = [];
+    brews = ["zellij" "koekeishiya/formulae/skhd"];
   };
 
   users.users.gila.home = "/Users/gila";
-  home-manager.users.gila = { pkgs, config, ... }: {
-
+  home-manager.users.gila = {
+    pkgs,
+    config,
+    ...
+  }: {
     manual.manpages.enable = true;
-    #    nixpkgs.overlays = [
-    #      (import (builtins.fetchTarball {
-    #        url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
-    #      }))
-    #      (import "${fetchTarball "https://github.com/nix-community/fenix/archive/main.tar.gz"}/overlay.nix")
-    #    ];
 
     home.stateVersion = "22.05";
-    home.packages = with pkgs;
-      [
-        kubernetes-helm
-        ansible-lint
-        fd
-        k9s
-        kubectl
-        mosh
-        nixpkgs-fmt
-        nixfmt
-        ripgrep
-        terraform-ls
-        terraform.full
-        tfk8s
-        wget
-      ];
+    home.packages = with pkgs; [
+      kubernetes-helm
+      ansible-lint
+      fd
+      k9s
+      kubectl
+      mosh
+      nixpkgs-fmt
+      nixfmt
+      ripgrep
+      terraform-ls
+      terraform.full
+      tfk8s
+      wget
+    ];
 
     programs.starship = {
       enable = true;
@@ -98,6 +91,11 @@
       '';
     };
 
+    xdg.configFile.nvim = {
+      source = ./nvim-config;
+      recursive = true;
+    };
+
     programs.dircolors = {
       enable = true;
       enableZshIntegration = true;
@@ -111,16 +109,14 @@
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
-      defaultOptions =
-        [ "--height 40%" "--layout=reverse" "--border" "--inline-info" ];
+      defaultOptions = ["--height 40%" "--layout=reverse" "--border" "--inline-info"];
     };
 
-    programs.ssh =
-      {
-        enable = true;
-        extraConfig = ''
-        '';
-      };
+    programs.ssh = {
+      enable = true;
+      extraConfig = ''
+      '';
+    };
 
     programs.zsh = {
       initExtra = ''
@@ -240,7 +236,7 @@
         };
         window_opacity = 0.9;
         live_config_reload = true;
-        selection = { save_to_clipboard = true; };
+        selection = {save_to_clipboard = true;};
         term = "xterm-256color";
 
         key_bindings = [
@@ -255,7 +251,6 @@
           normal = {
             family = "Hack Nerd Font";
             style = "Regular";
-
           };
           bold = {
             family = "Hack Nerd Font";
@@ -265,8 +260,6 @@
             family = "Hack Nerd Font";
             style = "Italic";
           };
-
-
         };
         colors = {
           primary = {
@@ -280,7 +273,6 @@
           };
 
           normal = {
-
             black = "0x1e2127";
             red = "0xe06c75";
             green = "0x98c379";
@@ -347,7 +339,6 @@
       yabai -m rule --add app='System Preferences' manage=off
     '';
   };
-
 
   services.nix-daemon.enable = true;
   programs.zsh = {

@@ -12,8 +12,8 @@
     };
 
     darwin = {
-     url = "github:lnl7/nix-darwin/master";
-    inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:lnl7/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = {
@@ -52,10 +52,14 @@
       };
     });
 
-    darwinConfigurations."m2" = darwin.lib.darwinSystem {
-        specialArgs = { inherit darwin overlay; };
+    darwinConfigurations = {
+      m2 = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        modules = [./nix/darwin-configuration ];
+        modules = [
+          home-manager.darwinModules.home-manager
+          ./nix/darwin-configuration.nix
+        ];
+      };
     };
 
     formatter = forAllSystems ({pkgs}: pkgs.alejandra);
