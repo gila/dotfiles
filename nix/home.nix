@@ -41,7 +41,6 @@
     ];
 
     extraPackages = with pkgs; [
-      rust-analyzer
       rnix-lsp
       gopls
       black
@@ -59,7 +58,7 @@
   };
 
   xdg.configFile.nvim = {
-    source = ./lua;
+    source = ./nvim-config;
     recursive = true;
   };
 

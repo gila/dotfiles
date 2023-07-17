@@ -182,7 +182,7 @@
       shortcut = "a";
       historyLimit = 5000000;
       extraConfig = ''
-        #set -g default-terminal "alacritty"
+        set -g default-terminal "alacritty"
         set -g mouse on
         set -s focus-events on
         set -sg escape-time 0
