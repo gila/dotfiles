@@ -50,6 +50,17 @@
           ./nix/home.nix
         ];
       };
+      gila = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          {
+            home.homeDirectory = "/home/gila";
+            home.username = "gila";
+            home.stateVersion = "23.05";
+          }
+          ./nix/home.nix
+        ];
+      };
     });
 
     darwinConfigurations = {
@@ -66,7 +77,8 @@
     packages = forAllSystems ({pkgs}: {
       fio = pkgs.fio;
 
-      home = self.h.${pkgs.system}.ubuntu.activationPackage;
+      ubuntu = self.h.${pkgs.system}.ubuntu.activationPackage;
+      gila = self.h.${pkgs.system}.gila.activationPackage;
     });
 
     devShells = forAllSystems ({pkgs}: {
